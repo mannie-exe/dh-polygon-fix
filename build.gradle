@@ -4,7 +4,7 @@ plugins {
 }
 
 version = mod_version
-group = 'io.github.mannieexe'
+group = 'design.inherent'
 base.archivesName = 'dh-polygon-fix'
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -99,7 +99,7 @@ tasks.named('check') { dependsOn 'verifyDh' }
 tasks.register('nativeProbe', JavaExec) {
     dependsOn 'testClasses', 'verifyDh'
     classpath = sourceSets.test.runtimeClasspath
-    mainClass = 'io.github.mannieexe.dhpolygonfix.test.NativeProbe'
+    mainClass = 'design.inherent.dhpolygonfix.test.NativeProbe'
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
     if (System.getProperty('os.name').toLowerCase().contains('mac')) {
         jvmArgs '-XstartOnFirstThread'
@@ -108,7 +108,7 @@ tasks.register('nativeProbe', JavaExec) {
 tasks.register('serverProbe', JavaExec) {
     dependsOn 'testClasses'
     classpath = sourceSets.test.runtimeClasspath
-    mainClass = 'io.github.mannieexe.dhpolygonfix.test.ServerProbe'
+    mainClass = 'design.inherent.dhpolygonfix.test.ServerProbe'
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
 }
 tasks.named('check') { dependsOn 'serverProbe' }

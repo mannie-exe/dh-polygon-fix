@@ -1,4 +1,4 @@
-package io.github.mannieexe.dhpolygonfix.test;
+package design.inherent.dhpolygonfix.test;
 
 import java.io.IOException;
 import java.io.InputStream;

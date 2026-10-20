@@ -1,4 +1,4 @@
-package io.github.mannieexe.dhpolygonfix.test;
+package design.inherent.dhpolygonfix.test;
 
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;

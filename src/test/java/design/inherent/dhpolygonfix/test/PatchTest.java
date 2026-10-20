@@ -1,4 +1,4 @@
-package io.github.mannieexe.dhpolygonfix.test;
+package design.inherent.dhpolygonfix.test;
 
 import com.seibel.distanthorizons.lwjgl.ILWJGLService;
 import java.lang.reflect.InvocationTargetException;

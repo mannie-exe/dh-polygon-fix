@@ -4,7 +4,7 @@
  * Backports Distant Horizons !126 / 51bf1f319b56e233ac8e0e8189cd7350444da0f6.
  * DH GLState: Copyright (C) 2020 James Seibel. See NOTICE.
  */
-package io.github.mannieexe.dhpolygonfix.mixin;
+package design.inherent.dhpolygonfix.mixin;
 
 import com.seibel.distanthorizons.lwjgl.ILWJGLService;
 import org.lwjgl.opengl.GL11;
