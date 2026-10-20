@@ -44,7 +44,8 @@ Use JDK 21 and the checked-in Gradle wrapper:
 its released class, checks that exactly one scalar query changed, and checks
 unrelated methods for unchanged bytecode. It executes the transformed handler
 with one-value and two-value driver simulations, including differing front/back
-values and an invalid-query negative case.
+values and an invalid-query negative case. Separate JVM probes mutate the target
+to remove or duplicate the query and verify that Mixin rejects both cases.
 
 `nativeProbe` needs a graphical session and OpenGL 4.1. It extracts the handler
 from the real transformed class and runs 10,000 native query/restore cycles.

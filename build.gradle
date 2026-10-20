@@ -112,3 +112,15 @@ tasks.register('serverProbe', JavaExec) {
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
 }
 tasks.named('check') { dependsOn 'serverProbe' }
+
+// Each mutation needs a fresh JVM because Mixin retains transformation state.
+['missing', 'duplicate'].each { mutation ->
+    def probe = tasks.register("${mutation}TargetProbe", JavaExec) {
+        dependsOn 'testClasses', 'verifyDh'
+        classpath = sourceSets.test.runtimeClasspath
+        mainClass = 'design.inherent.dhpolygonfix.test.TargetGuardProbe'
+        args mutation
+        javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+    }
+    tasks.named('check') { dependsOn probe }
+}
