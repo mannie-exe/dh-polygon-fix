@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="LGPL-3.0-only"
+issueTrackerURL="https://github.com/mannie-exe/dh-polygon-fix/issues"
+
+[[mods]]
+modId="dh_polygon_fix"
+version="${version}"
+displayName="Distant Horizons Polygon Fix"
+authors="mannie-exe"
+displayURL="https://github.com/mannie-exe/dh-polygon-fix"
+description='''Unofficial client-side backport of Distant Horizons !126 for DH 3.3.3.
+Prevents an undersized native GL_POLYGON_MODE query. Remove when upgrading DH.'''
+
+[[mixins]]
+config="dh_polygon_fix.mixins.json"
+
+[[dependencies.dh_polygon_fix]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.263,21.2)"
+side="BOTH"
+
+[[dependencies.dh_polygon_fix]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+side="BOTH"
+
+[[dependencies.dh_polygon_fix]]
+modId="distanthorizons"
+type="required"
+versionRange="[3.3.3]"
+side="CLIENT"
+reason="This temporary patch only supports DH 3.3.3; remove it when upgrading DH"

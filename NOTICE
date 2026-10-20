@@ -1,0 +1,22 @@
+Distant Horizons Polygon Fix is an unofficial, independent compatibility mod.
+It is not an official Distant Horizons release.
+
+This project backports the GL_POLYGON_MODE fix incorporated from upstream !126:
+https://gitlab.com/distant-horizons-team/distant-horizons/-/merge_requests/126
+https://gitlab.com/distant-horizons-team/distant-horizons/-/commit/51bf1f319b56e233ac8e0e8189cd7350444da0f6
+
+Affected upstream file: common/src/main/java/com/seibel/distanthorizons/common/render/openGl/glObject/GLState.java
+Copyright (C) 2020 James Seibel, GNU LGPL version 3.
+Tested base source revision: 575517f261dfd04e302a37719f1459e9b5633d9f
+
+Changes made October 19, 2026 by mannie-exe:
+Supply the upstream two-int query through a client-only runtime Mixin for
+Minecraft 1.21.1 / NeoForge / DH 3.3.3. The original DH JAR remains separate.
+
+Patch code is licensed LGPL-3.0-only. GPLv3 and LGPLv3 texts accompany this
+distribution. Source and build instructions:
+https://github.com/mannie-exe/dh-polygon-fix
+
+Gradle wrapper and initial project structure are based on the NeoForge 1.21.1
+ModDevGradle MDK; the wrapper retains its embedded Apache-2.0 notices.
+No Distant Horizons logo is included.

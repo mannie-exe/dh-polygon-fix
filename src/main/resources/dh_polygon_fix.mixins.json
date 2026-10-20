@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8.7",
+  "package": "io.github.mannieexe.dhpolygonfix.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["GLStateMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

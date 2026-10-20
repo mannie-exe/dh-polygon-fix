@@ -1,0 +1,114 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+
+version = mod_version
+group = 'io.github.mannieexe'
+base.archivesName = 'dh-polygon-fix'
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+repositories {
+    exclusiveContent {
+        forRepository { mavenCentral() }
+        filter {
+            includeGroupByRegex 'org\\.junit.*'
+            includeGroup 'org.opentest4j'
+            includeGroup 'org.apiguardian'
+        }
+    }
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+}
+neoForge {
+    version = '21.1.263'
+    runs {
+        client {
+            client()
+            gameDirectory = file('runs/client')
+            systemProperty 'mixin.debug.export', 'true'
+            systemProperty 'mixin.debug.countInjections', 'true'
+        }
+        server {
+            server()
+            gameDirectory = file('runs/server')
+            programArgument '--nogui'
+        }
+    }
+    mods {
+        dh_polygon_fix { sourceSet(sourceSets.main) }
+    }
+}
+configurations {
+    localRuntime
+    runtimeClasspath.extendsFrom localRuntime
+}
+// Plain JVM tests use the same Mixin/LWJGL versions as the target game, without
+// booting NeoForge's test framework or loading Minecraft classes.
+sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
+dependencies {
+    compileOnly('maven.modrinth:distanthorizons:9w34y8ai') { transitive = false }
+    localRuntime('maven.modrinth:distanthorizons:9w34y8ai') { transitive = false }
+    testImplementation('maven.modrinth:distanthorizons:9w34y8ai') { transitive = false }
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+tasks.named('jar', Jar) {
+    archiveFileName = "dh-polygon-fix-${version}-mc1.21.1-neoforge.jar"
+    from('LICENSE.txt', 'LICENSE.LESSER.txt', 'NOTICE')
+}
+tasks.named('sourcesJar', Jar) {
+    from('LICENSE.txt', 'LICENSE.LESSER.txt', 'NOTICE')
+}
+tasks.named('processResources', ProcessResources) {
+    inputs.property 'version', project.version
+    filesMatching('META-INF/neoforge.mods.toml') { expand version: project.version }
+}
+tasks.named('test', Test) {
+    useJUnitPlatform()
+}
+tasks.register('verifyDh') {
+    inputs.files(configurations.compileClasspath)
+    doLast {
+        def dh = configurations.compileClasspath.resolvedConfiguration.resolvedArtifacts.find {
+            it.moduleVersion.id.group == 'maven.modrinth' && it.name == 'distanthorizons'
+        }?.file
+        if (dh == null) throw new GradleException('Pinned DH artifact missing')
+        def actual = java.security.MessageDigest.getInstance('SHA-256').digest(dh.bytes).encodeHex().toString()
+        if (actual != '864e70def5b0d54d619b940b66bb2784e91d3f3fc253064fdc1b3fc5786cbfab') {
+            throw new GradleException("Unexpected DH artifact: ${actual}")
+        }
+    }
+}
+tasks.named('check') { dependsOn 'verifyDh' }
+
+tasks.register('nativeProbe', JavaExec) {
+    dependsOn 'testClasses', 'verifyDh'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'io.github.mannieexe.dhpolygonfix.test.NativeProbe'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+    if (System.getProperty('os.name').toLowerCase().contains('mac')) {
+        jvmArgs '-XstartOnFirstThread'
+    }
+}
+tasks.register('serverProbe', JavaExec) {
+    dependsOn 'testClasses'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'io.github.mannieexe.dhpolygonfix.test.ServerProbe'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+}
+tasks.named('check') { dependsOn 'serverProbe' }
