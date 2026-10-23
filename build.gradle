@@ -124,3 +124,8 @@ tasks.named('check') { dependsOn 'serverProbe' }
     }
     tasks.named('check') { dependsOn probe }
 }
+
+tasks.register('releaseToolTest', Exec) {
+    commandLine 'python3', '-m', 'unittest', 'discover', '-s', 'tools/tests'
+}
+tasks.named('check') { dependsOn 'releaseToolTest' }

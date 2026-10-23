@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Publish only the identical, tested binaries from this tag's three CI jobs."""
+import argparse
 import hashlib
 import pathlib
 import shutil
 import subprocess
-import sys
 
 root = pathlib.Path(__file__).resolve().parents[1]
 version = next(
@@ -12,7 +12,11 @@ version = next(
     for line in (root / "gradle.properties").read_text().splitlines()
     if line.startswith("mod_version=")
 )
-tag = sys.argv[1]
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("tag")
+parser.add_argument("--stage-only", action="store_true", help="Validate and stage without publishing")
+args = parser.parse_args()
+tag = args.tag
 if tag != f"v{version}":
     raise SystemExit("Tag must equal mod_version")
 head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
@@ -46,6 +50,9 @@ for algorithm in ["sha256", "sha512"]:
         f"{hashlib.new(algorithm, path.read_bytes()).hexdigest()}  {path.name}\n"
         for path in assets
     ), encoding="utf-8")
+if args.stage_only:
+    print("Verified release files:", destination)
+    raise SystemExit(0)
 subprocess.run([
     "gh", "release", "create", tag,
     *map(str, sorted(destination.iterdir())),
