@@ -1,13 +1,18 @@
 # Publishing
 
-## Release
+## GitHub releases
+
+Main branch pushes run validation; only version tags enable publication.
+Documentation-only changes need no tag or version bump.
 
 Update `mod_version`, release notes, and verification evidence; commit and push
 a matching `v<version>` tag. The release workflow requires all three CI jobs,
 checks that their binaries are identical, and publishes the binary, sources JAR,
 complete project source ZIP, and SHA-256/SHA-512 manifests.
 `python3 tools/release.py v<version> --stage-only` validates/stages downloaded CI
-artifacts without publishing; five fixture tests exercise its rejection guards. A draft becomes public
+artifacts from `build/ci/build-<runner>/` without publishing. The staging directory
+`build/release` must not already exist. Five fixture tests exercise rejection
+guards. A draft becomes public
 only after every asset upload succeeds.
 
 Modpacks can pin the public GitHub release asset URL and its digest. Mark this
@@ -17,8 +22,8 @@ URL or overwrite published release assets.
 
 ## Modrinth project
 
-Create the project under **mannie-exe**. The public profile currently lists no
-projects; GitHub already hosts [dh-polygon-fix](https://github.com/mannie-exe/dh-polygon-fix).
+Modrinth publication is deferred. The following metadata describes the intended
+listing; GitHub remains the release source.
 
 | Field | Selection |
 | --- | --- |
@@ -48,9 +53,10 @@ The project page should explain the macOS driver reproduction, without describin
 this as a general performance optimization or a fix for every DH crash. The patch
 also safely applies on other supported client platforms.
 
-## Upload process
+## Manual upload
 
-1. Create a draft project at Modrinth while signed in as mannie-exe.
+1. After publication eligibility is resolved, create a draft project using an
+   authorized publisher account.
 2. Set the project fields above and use the README's player-facing text for the
    description. Add a human-created icon if desired; do not reuse DH branding.
 3. Upload the verified binary and release notes. Select the exact required
@@ -67,24 +73,14 @@ References: [project creation](https://docs.modrinth.com/api/operations/createpr
 [version uploads](https://docs.modrinth.com/api/operations/createversion/),
 [environment selections](https://modrinth.com/news/article/new-environments/).
 
-## Content disclosures and publication eligibility
+## Attribution and publication eligibility
 
-Select **AI-generated code** and **AI-generated text** for the contributions
-produced in this authoring workflow. There is no runtime AI functionality or
-AI-generated artwork in these projects. DH Polygon Fix also attributes its
-upstream backport in NOTICE and the README; its derivative-code disclosure should
-identify that origin.
+This patch combines the attributed DH !126 correction with AI-authored integration,
+tests and documentation. Preserve the upstream credit in `NOTICE` and the README.
+There is no runtime AI functionality or AI-generated artwork.
 
-The [current Modrinth rules](https://modrinth.com/legal/rules) prohibit public
-projects whose contents are primarily or entirely AI-generated. Disclosure alone
-does not make such a project eligible. Sky Village Neighbors' current code was
-written in this agent workflow and must not be presented as ready for public
-Modrinth submission under that rule. DH Polygon Fix combines an attributed
-upstream fix with agent-authored integration/tests; eligibility is not established
-by its passing tests or GitHub release. Resolve eligibility with Modrinth before
-submitting either project; do not misstate authorship or treat superficial edits
-as changing it.
-
-These fields and upload instructions are a prepared publishing reference, not a
-claim of moderation approval. See also the
-[disclosure guide](https://support.modrinth.com/en/articles/16567675-content-disclosures).
+Modrinth's [content rules](https://modrinth.com/legal/rules), checked 2026-10-25,
+restrict projects primarily composed of generated content. Eligibility is unresolved;
+disclosure does not establish approval. Resolve it before submission and retain
+accurate code/text disclosures under the [disclosure guidance](https://support.modrinth.com/en/articles/16567675-content-disclosures).
+Changing prose does not change the code's provenance.

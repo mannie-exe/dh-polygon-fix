@@ -1,6 +1,6 @@
 # Development
 
-## What changes
+## Polygon query
 
 DH's `GLState.saveState()` calls the scalar `glGetInteger(GL_POLYGON_MODE)`
 helper, whose native buffer only has room for one integer. A driver can write
@@ -50,7 +50,6 @@ The build downloads the pinned official DH binary as a development dependency.
 Output is in `build/libs`. No accounts, worlds, game files, or DH binary belong
 in this repository.
 
-
 ## Verified environment
 
 On 2026-10-23, `./gradlew --no-daemon check build nativeProbe` passed on an
@@ -63,3 +62,14 @@ matching artifacts and rejection of mismatched binaries, missing files, a wrong
 tag version, and a checkout that does not match the tag. The workflow's Python
 version is pinned to 3.13, and `.gitattributes` fixes tracked text to LF for
 cross-platform source archive consistency.
+
+## Dependency updates
+
+The runtime metadata requires exactly DH 3.3.3. Before upgrading it, inspect the
+released `GLState.saveState()` implementation and the upstream correction linked
+from the README. If the release contains the corrected query, remove this patch.
+Otherwise review the target bytecode, dependency checksum and runtime constraint
+together; do not widen the version range without checking the new artifact.
+
+Rerun transformation, rejection and native checks for a changed target. A passing
+build establishes neither shader-stack compatibility nor support for every driver.

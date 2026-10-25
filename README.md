@@ -6,7 +6,8 @@ reserved for one. That can corrupt adjacent native memory and cause delayed cras
 
 ## Installation
 
-For **Minecraft 1.21.1 with NeoForge**, install the
+Use **Minecraft 1.21.1, NeoForge 21.1.263 or later in the 21.1 series, and Java 21**.
+Install the
 [release mod JAR](https://github.com/mannie-exe/dh-polygon-fix/releases) alongside
 Distant Horizons 3.3.3 on the client. Choose the file ending in
 `-mc1.21.1-neoforge.jar`, not the sources JAR. No configuration is needed.
